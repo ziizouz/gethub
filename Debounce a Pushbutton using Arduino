@@ -1,0 +1,44 @@
+//Debouncing a pushbutton to avoid purious open/close transitions when pressed 
+
+const int outLed = 8, inButton = 11;  // outLed in the pin 8 connected to an output LED , Pin 11 in the Button pin , It's an input
+
+boolean lastState = LOW;  // last state of the button
+
+void setup(){
+  //Setting the pins as output for LED pin and INPUT for the BUTTON pin
+  pinMode(outLed, OUTPUT);
+  pinMode(inButton , INPUT);
+
+  digitalWrite(outLed, LOW); // Making sure that the LED is off when the arduino is on 
+  }
+
+// the debounce function
+
+void debounce(boolean state){   // state is the first reading of the button state
+    if(state != lastState){  // if the button is HIGH ==> Pressed we would check it again if it was a real press !
+      delay(50);  // Waitig 50 ms and re Read the state of the button
+      
+      if(digitalRead(inButton)  == state){  //If the new reading after 50ms is equals to the first reading ==> the button is really pressed
+        lastState = !lastState; // flip the state of the button for later use. Notice that lastState was set to be LOW initially 
+        }
+      }
+  }
+  
+
+
+
+void loop(){
+  debounce(digitalRead(inButton));  // Reading the input of the button 
+  
+  //The debounce is finished now, and we've wrote the results in the global variable lastState to use it here !
+  
+  digitalWrite(outLed, lastState);  // if the button was pressed ==> lastState will be HIGH ==> the LED will light up 
+
+  lastState = !lastState;   // Flip the state of the button for reUse when the loop begins again !
+  
+  
+  //END , you can check arduino's webpage for other programs of debouncing 
+  //Check https://www.arduino.cc/en/Tutorial/Debounce
+  }
+  
+  
